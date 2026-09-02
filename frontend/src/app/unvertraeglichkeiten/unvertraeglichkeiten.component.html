@@ -1,0 +1,237 @@
+<app-header [breadcrumb]="breadcrumb"></app-header>
+
+<div class="row justify-content-center content">
+  <div class="col-12 col-lg-10 p-0 m-0">
+    <mat-tab-group class="uv-tabs" animationDuration="0ms">
+
+      <mat-tab label="Gruppen">
+        <mat-card class="mt-3">
+          <mat-card-header>
+            <mat-card-title>Gruppe anlegen</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="formGruppe" (ngSubmit)="gruppeSpeichern()">
+              <section class="row mt-3 align-items-center">
+                <div class="col-12 col-lg-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Gruppenname</mat-label>
+                    <input matInput type="text" formControlName="name" />
+                  </mat-form-field>
+                </div>
+                <div class="col-8 col-lg-4 d-flex align-items-center">
+                  <button mat-stroked-button type="button" (click)="gruppenBildInput.click()">
+                    <mat-icon>image</mat-icon> Gruppenbild
+                  </button>
+                  <input #gruppenBildInput type="file" accept="image/*" hidden (change)="gruppenBildAuswaehlen($event)" />
+                  @if (gruppenBildPreview) {
+                    <img class="uv-bild-preview ms-2" [src]="gruppenBildPreview" alt="Gruppenbild Vorschau" />
+                  }
+                </div>
+                <div class="col-4 col-lg-3">
+                  <button mat-raised-button color="accent" type="submit" [disabled]="!formGruppe.valid">
+                    Speichern
+                  </button>
+                </div>
+              </section>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-3">
+          @for (gruppe of gruppen; track gruppe.pkid) {
+            <div class="col-6 col-md-4 col-lg-3 mb-3">
+              <mat-card class="uv-karte">
+                @if (gruppe.bild) {
+                  <img class="uv-karten-bild" [src]="gruppe.bild" alt="{{ gruppe.name }}" />
+                } @else {
+                  <div class="uv-karten-bild uv-karten-bild-platzhalter">
+                    <mat-icon>groups</mat-icon>
+                  </div>
+                }
+                <mat-card-footer class="uv-karten-footer">
+                  <span>{{ gruppe.name }}</span>
+                  <mat-icon (click)="gruppeLoeschen(gruppe)">delete</mat-icon>
+                </mat-card-footer>
+              </mat-card>
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Kategorien">
+        <mat-card class="mt-3">
+          <mat-card-header>
+            <mat-card-title>Verträglichkeitskategorie anlegen</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="formKategorie" (ngSubmit)="kategorieSpeichern()">
+              <section class="row mt-3 align-items-center">
+                <div class="col-12 col-lg-5">
+                  <mat-form-field class="w-100">
+                    <mat-label>Kategoriename</mat-label>
+                    <input matInput type="text" formControlName="name" />
+                  </mat-form-field>
+                </div>
+                <div class="col-8 col-lg-4 d-flex align-items-center">
+                  <button mat-stroked-button type="button" (click)="kategorieBildInput.click()">
+                    <mat-icon>image</mat-icon> Kategoriebild
+                  </button>
+                  <input #kategorieBildInput type="file" accept="image/*" hidden (change)="kategorieBildAuswaehlen($event)" />
+                  @if (kategorieBildPreview) {
+                    <img class="uv-bild-preview ms-2" [src]="kategorieBildPreview" alt="Kategoriebild Vorschau" />
+                  }
+                </div>
+                <div class="col-4 col-lg-3">
+                  <button mat-raised-button color="accent" type="submit" [disabled]="!formKategorie.valid">
+                    Speichern
+                  </button>
+                </div>
+              </section>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <div class="row mt-3">
+          @for (kategorie of kategorien; track kategorie.pkid) {
+            <div class="col-6 col-md-4 col-lg-3 mb-3">
+              <mat-card class="uv-karte">
+                @if (kategorie.bild) {
+                  <img class="uv-karten-bild" [src]="kategorie.bild" alt="{{ kategorie.name }}" />
+                } @else {
+                  <div class="uv-karten-bild uv-karten-bild-platzhalter">
+                    <mat-icon>category</mat-icon>
+                  </div>
+                }
+                <mat-card-footer class="uv-karten-footer">
+                  <span>{{ kategorie.name }}</span>
+                  <mat-icon (click)="kategorieLoeschen(kategorie)">delete</mat-icon>
+                </mat-card-footer>
+              </mat-card>
+            </div>
+          }
+        </div>
+      </mat-tab>
+
+      <mat-tab label="Kinder">
+        <mat-card class="mt-3">
+          <mat-card-header>
+            <mat-card-title>Kind {{ formKind.value.pkid ? 'bearbeiten' : 'anlegen' }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <form [formGroup]="formKind" (ngSubmit)="kindSpeichern()">
+              <section class="row mt-3 align-items-center">
+                <div class="col-12 col-lg-3">
+                  <mat-form-field class="w-100">
+                    <mat-label>Name</mat-label>
+                    <input matInput type="text" formControlName="name" />
+                  </mat-form-field>
+                </div>
+                <div class="col-6 col-lg-2 d-flex align-items-center">
+                  <label class="me-2" for="uvKindFarbe">Farbe</label>
+                  <input id="uvKindFarbe" type="color" formControlName="farbe" class="uv-farbe-input" />
+                </div>
+                <div class="col-6 col-lg-3">
+                  <mat-form-field class="w-100">
+                    <mat-label>Gruppe</mat-label>
+                    <mat-select formControlName="gruppe">
+                      @for (gruppe of gruppen; track gruppe.pkid) {
+                        <mat-option [value]="gruppe.pkid">{{ gruppe.name }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 col-lg-4">
+                  <mat-form-field class="w-100">
+                    <mat-label>Kategorien</mat-label>
+                    <mat-select formControlName="kategorien" multiple>
+                      @for (kategorie of kategorien; track kategorie.pkid) {
+                        <mat-option [value]="kategorie.pkid">{{ kategorie.name }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class="col-12 mt-2">
+                  <button mat-raised-button color="accent" type="submit" [disabled]="!formKind.valid">
+                    Speichern
+                  </button>
+                  @if (formKind.value.pkid) {
+                    <button mat-stroked-button type="button" class="ms-2" (click)="kindAbbrechen()">
+                      Abbrechen
+                    </button>
+                  }
+                </div>
+              </section>
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="mt-3">
+          <mat-card-content>
+            <mat-list role="list">
+              @for (kind of kinder; track kind.pkid) {
+                <mat-list-item role="listitem" class="uv-kind-item">
+                  <span class="uv-farbe-punkt" [style.background-color]="kind.farbe"></span>
+                  <span class="uv-kind-name">{{ kind.name }}</span>
+                  <span class="uv-kind-gruppe">{{ kind.gruppe_name }}</span>
+                  <span class="uv-kind-kategorien">
+                    @for (kategorie of kind.kategorien_detail; track kategorie.pkid) {
+                      <span class="uv-kategorie-chip">{{ kategorie.name }}</span>
+                    }
+                  </span>
+                  <span class="uv-kind-aktionen">
+                    <mat-icon (click)="kindBearbeiten(kind)">edit</mat-icon>
+                    <mat-icon (click)="kindLoeschen(kind)">delete</mat-icon>
+                  </span>
+                </mat-list-item>
+              }
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+
+      <mat-tab label="Druckansicht">
+        <div class="row mt-3 mb-2 no-print">
+          <div class="col-12 d-flex justify-content-end">
+            <button mat-raised-button color="accent" (click)="drucken()">
+              <mat-icon>print</mat-icon> Drucken
+            </button>
+          </div>
+        </div>
+
+        <div class="uv-druck">
+          <div class="uv-druck-grid" [style.grid-template-columns]="'200px repeat(' + gruppen.length + ', 1fr)'">
+            <div class="uv-druck-zelle uv-druck-ecke"></div>
+            @for (gruppe of gruppen; track gruppe.pkid) {
+              <div class="uv-druck-zelle uv-druck-gruppen-kopf">
+                @if (gruppe.bild) {
+                  <img [src]="gruppe.bild" alt="{{ gruppe.name }}" />
+                }
+                <span>{{ gruppe.name }}</span>
+              </div>
+            }
+
+            @for (kategorie of kategorien; track kategorie.pkid) {
+              <div class="uv-druck-zelle uv-druck-kategorie-kopf">
+                @if (kategorie.bild) {
+                  <img [src]="kategorie.bild" alt="{{ kategorie.name }}" />
+                }
+                <span>{{ kategorie.name }}</span>
+              </div>
+              @for (gruppe of gruppen; track gruppe.pkid) {
+                <div class="uv-druck-zelle uv-druck-inhalt">
+                  @for (kind of kinderZelle(gruppe, kategorie); track kind.pkid) {
+                    <span class="uv-druck-kind" [style.border-color]="kind.farbe">
+                      <span class="uv-farbe-punkt" [style.background-color]="kind.farbe"></span>
+                      {{ kind.name }}
+                    </span>
+                  }
+                </div>
+              }
+            }
+          </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

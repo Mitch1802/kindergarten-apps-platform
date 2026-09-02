@@ -370,6 +370,9 @@ export class GlobalDataService {
     } else if (page == 'V_KO') {
       link = '/konfiguration';
       kuerzel = 'Konfiguration';
+    } else if (page == 'V_UV') {
+      link = '/unvertraeglichkeiten';
+      kuerzel = 'Unverträglichkeiten';
     }
 
     const btn = {
