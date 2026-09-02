@@ -9,6 +9,7 @@ import { WochenplanComponent } from './wochenplan/wochenplan.component';
 import { EntwicklungsgespraechComponent } from './entwicklungsgespraech/entwicklungsgespraech.component';
 import { LerngeschichteComponent } from './lerngeschichte/lerngeschichte.component';
 import { SetupComponent } from './setup/setup.component';
+import { UnvertraeglichkeitenComponent } from './unvertraeglichkeiten/unvertraeglichkeiten.component';
 
 export const routes: Routes = [
   {
@@ -43,6 +44,9 @@ export const routes: Routes = [
   },
   {
     path: 'konfiguration', component: KonfigurationComponent
+  },
+  {
+    path: 'unvertraeglichkeiten', component: UnvertraeglichkeitenComponent
   },
   {
     path: '*', component: LoginComponent

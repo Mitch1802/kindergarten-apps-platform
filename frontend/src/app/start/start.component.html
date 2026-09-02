@@ -46,6 +46,14 @@
       </mat-card>
     </div>
   } --> 
+  @if (rollen.includes('ADMIN') || rollen.includes('UNVERTRAEGLICHKEITEN')) {
+    <div class="col-6 col-md-4 col-lg-4 col-xl-2 content-item link-card">
+      <mat-card routerLink="/unvertraeglichkeiten">
+        <mat-icon class="material-icons-outlined">no_food</mat-icon>
+        <mat-card-footer>Unverträglichkeiten</mat-card-footer>
+      </mat-card>
+    </div>
+  }
   @if (rollen.includes('ADMIN') || rollen.includes('SETUP')) {
     <div class="col-6 col-md-4 col-lg-4 col-xl-2 content-item link-card">
       <mat-card routerLink="/setup">
