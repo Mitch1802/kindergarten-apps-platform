@@ -22,3 +22,13 @@ class BaseMediaGetFileView(APIView):
 class MediaNewsGetFileView(BaseMediaGetFileView):
     """Abruf von News-Mediendateien."""
     subdirectory = "news"
+
+
+class MediaUnvertraeglichkeitenGruppenGetFileView(BaseMediaGetFileView):
+    """Abruf von Gruppenbildern der Unverträglichkeiten."""
+    subdirectory = "unvertraeglichkeiten/gruppen"
+
+
+class MediaUnvertraeglichkeitenKategorienGetFileView(BaseMediaGetFileView):
+    """Abruf von Kategoriebildern der Unverträglichkeiten."""
+    subdirectory = "unvertraeglichkeiten/kategorien"
